@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 
-public class BallController : MonoBehaviour{
+public class BallController : MonoBehaviour {
 
     #region Variables
     private Rigidbody _rb;
+    private InputManager _inputManager;
 
     [SerializeField]
-    private float _forcePower = 0;
-    [SerializeField]
-    private float _gravityMultiplier= 0;
+    private float _gravityMultiplier = 0;
     #endregion
 
 
@@ -16,13 +15,13 @@ public class BallController : MonoBehaviour{
     #region MonoBehaviour
     private void Start() {
         _rb = GetComponent<Rigidbody>();
+        _inputManager = GetComponent<InputManager>();
+        _rb.isKinematic = true;
     }
 
     private void Update() {
         ApplyConstantFallForce();
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            _rb.AddForce(Vector3.up * _forcePower,ForceMode.Impulse);
-        }
+        _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance), ForceMode.Impulse);
     }
 
     #endregion
