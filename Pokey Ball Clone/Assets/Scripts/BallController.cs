@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Data;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BallController : MonoBehaviour {
 
     #region Variables
+    public static Action onStick;
+
     private Rigidbody _rb;
     private InputManager _inputManager;
 
@@ -14,6 +17,8 @@ public class BallController : MonoBehaviour {
     private float _rayDistance = 0f;
     [SerializeField]
     private float _deadZone = 0f;
+    [SerializeField]
+    private float _shakeAmount= 1f;
 
     private bool _isFlying = false;
     private bool _hasSticked = true;
@@ -25,6 +30,7 @@ public class BallController : MonoBehaviour {
     private void Start() {
         DragHandler.onEndDrag += CorrectPosition;
         DragHandler.onEndDrag += ApplyJumpForce;
+        DragHandler.onDragging += CancelLeanTween;
         InputManager.omClickToScreen += StickToTower;
 
         _rb = GetComponent<Rigidbody>();
@@ -60,6 +66,9 @@ public class BallController : MonoBehaviour {
         _hasSticked = false;
     }
 
+    private void CancelLeanTween(PointerEventData data) {
+        LeanTween.cancelAll();
+    }
     /// <summary>
     /// Adjust the gameobject position based on swipe distance to simulate strech effect
     /// </summary>
@@ -88,6 +97,7 @@ public class BallController : MonoBehaviour {
                 _isFlying = false;
                 _hasSticked = true;
                 _stickPos = transform.position;
+                onStick?.Invoke();
             }
         }
     }
