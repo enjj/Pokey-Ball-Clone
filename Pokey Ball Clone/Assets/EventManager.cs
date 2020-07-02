@@ -5,10 +5,5 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour {
 
-
-    public static event Action OnSwipeCanceled;
-    public static event Action OnSwiped;
-
-
 }
 

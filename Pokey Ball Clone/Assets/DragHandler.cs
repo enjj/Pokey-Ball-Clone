@@ -8,7 +8,6 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public static Action<PointerEventData> onBeginDrag;
     public static Action<PointerEventData> onDragging;
     public static Action onEndDrag;
-
     private bool _isBlocked = false;
 
     public void OnBeginDrag(PointerEventData eventData) {
@@ -31,4 +30,5 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         onEndDrag?.Invoke();
     }
+
 }

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour {
     #region Variables
+    public static Action omClickToScreen;
 
     private float _swipeStartPos;
     private float _swipeEndPos;
@@ -33,8 +34,14 @@ public class InputManager : MonoBehaviour {
 
     private void Start() {
         DragHandler.onBeginDrag += SetStartPos;
-        DragHandler.onDragging += CalculateDistance;
+        DragHandler.onDragging += CalculateSwipeDistance;
         DragHandler.onEndDrag += StopSwiping;
+    }
+
+    private void Update() {
+        if (Input.GetMouseButtonDown(0)) {
+            omClickToScreen?.Invoke();
+        }
     }
 
     #endregion
@@ -46,7 +53,7 @@ public class InputManager : MonoBehaviour {
         _isSwiping = true;
     }
 
-    private void CalculateDistance(PointerEventData data) {
+    private void CalculateSwipeDistance(PointerEventData data) {
         _swipeDistance = (data.position.y - _swipeStartPos);
         _delta = data.delta.y;
     }
