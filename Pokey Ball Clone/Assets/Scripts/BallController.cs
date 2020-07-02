@@ -69,6 +69,7 @@ public class BallController : MonoBehaviour {
     private void CorrectPosition() {
         if (!_isFlying) {
             if (Vector3.Distance(transform.position,_stickPos) != 0) {
+                transform.position = Vector3.Lerp(transform.position, _stickPos, 1f);
             }
         }
     }
