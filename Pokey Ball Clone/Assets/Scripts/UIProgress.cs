@@ -34,11 +34,6 @@ public class UIProgress : MonoBehaviour {
     private void SceneLoaded(Scene scene, LoadSceneMode mode) {
         _currentSceneIndex = scene.buildIndex;
 
-        if (_currentSceneIndex == 0) {
-            SceneManager.LoadScene(1);
-            return;
-        }
-
         _txtCurrentLevel.text = scene.buildIndex.ToString();
 
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
@@ -51,16 +46,13 @@ public class UIProgress : MonoBehaviour {
     }
 
     private void Update() {
-        if (_currentSceneIndex == 0) {
-            return;
-        }
 
         float mePosZ = 0f;
         if (_meTransform) {
-            mePosZ = _meTransform.position.z;
+            mePosZ = _meTransform.position.y;
         }
 
-        float meMappedValue = ExtensionMethods.Map(mePosZ, _startTransform.position.z, _endTransform.position.z, _rectStartX, _rectEndX);
+        float meMappedValue = ExtensionMethods.Map(mePosZ, _startTransform.position.y, _endTransform.position.y, _rectStartX, _rectEndX);
         _meRect.anchoredPosition = new Vector2(meMappedValue, _meRect.anchoredPosition.y);
     }
 
