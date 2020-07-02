@@ -11,10 +11,18 @@ public class AnimationController : MonoBehaviour {
     private float speed = 20.0f; //how fast it shakes
     [SerializeField]
     private float amount = 1.0f; //how much it shakes
+    [SerializeField]
+    private LeanTweenType _easeType;
+
     private void Start() {
         LeanTween.linear(amount, 0, 1);
     }
     private void Update() {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            LeanTween.value(amount, 0, 2f).setEase(_easeType).setOnUpdate((float value) => {
+                amount = value;
+            });
+        }
         ShakeTheBall();
     }
     private void ShakeTheBall() {

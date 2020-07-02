@@ -17,18 +17,18 @@ public class CameraController : MonoBehaviour {
     }
 
     private void Update() {
-        if (_inputmanager.IsSwiping)
-            SetFieldOfView();
+        SetFOV();
         ResetFOV();
 
     }
 
-    private void SetFieldOfView() {
-        _cam.m_Lens.FieldOfView = _fov - _inputmanager.SwipeDistance / 100;
+    private void SetFOV() {
+        if (_inputmanager.IsSwiping)
+            _cam.m_Lens.FieldOfView = _fov - _inputmanager.SwipeDistance / 100;
     }
     private void ResetFOV() {
-        if (!_inputmanager.IsSwiping) {
+        if (!_inputmanager.IsSwiping)
             _cam.m_Lens.FieldOfView = Mathf.Lerp(_cam.m_Lens.FieldOfView, _fov, 0.025f);
-        }
+
     }
 }
