@@ -14,6 +14,7 @@ public class BallController : MonoBehaviour {
     private float _rayDistance = 0f;
     [SerializeField]
     private float _deadZone = 0f;
+
     private bool _isFlying = false;
     private Vector3 _stickPos = Vector3.zero;
     #endregion
@@ -50,6 +51,7 @@ public class BallController : MonoBehaviour {
         if (_inputManager.SwipeDistance >= 0 || _inputManager.SwipeDistance / 100 > _deadZone) {
             return;
         }
+        LeanTween.cancelAll();
         _rb.isKinematic = false;
         _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance / 10), ForceMode.Impulse);
         _isFlying = true;
@@ -63,13 +65,13 @@ public class BallController : MonoBehaviour {
     }
 
     /// <summary>
-    ///  Player swiped but if the amount of swipe is not bigger than deadzone which means we didn't add force to gameobject. than we set
-    ///  its position to where it stick to wall
+    ///  Player swiped but if the amount of swipe is not bigger than deadzone which means we didn't add force to gameobject
+    ///  than we set its position to where it stick to wall
     /// </summary>
     private void CorrectPosition() {
         if (!_isFlying) {
             if (Vector3.Distance(transform.position,_stickPos) != 0) {
-                transform.position = Vector3.Lerp(transform.position, _stickPos, 1f);
+                LeanTween.move(gameObject, _stickPos, 0.2f).setEase(LeanTweenType.easeOutCubic);
             }
         }
     }
