@@ -55,6 +55,8 @@ public class InputManager : MonoBehaviour {
 
     private void CalculateSwipeDistance(PointerEventData data) {
         _swipeDistance = (data.position.y - _swipeStartPos);
+        if (_swipeDistance > 0)
+            _swipeDistance = 0;
         _delta = data.delta.y;
     }
 

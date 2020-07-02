@@ -1178,6 +1178,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball
       objectReference: {fileID: 0}
+    - target: {fileID: 3488064790815439029, guid: c0637c7d5293d6846a5fe247e0eec5c0,
+        type: 3}
+      propertyPath: _deadZone
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3488064790815439031, guid: c0637c7d5293d6846a5fe247e0eec5c0,
         type: 3}
       propertyPath: m_LocalPosition.x
