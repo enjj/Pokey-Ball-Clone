@@ -7,20 +7,21 @@ public class BallController : MonoBehaviour {
 
     #region Variables
     public static Action onStick;
+    public static Action onRelase;
 
     private Rigidbody _rb;
     private InputManager _inputManager;
 
     [SerializeField]
-    private float _gravityMultiplier = 0;
+    private Transform _ballParent;
+    [SerializeField]
+    private Transform _barTransform;
     [SerializeField]
     private float _rayDistance = 0f;
     [SerializeField]
     private float _deadZone = 0f;
     [SerializeField]
-    private Transform _ballParent;
-    [SerializeField]
-    private Transform _barTransform;
+    private float _gravityMultiplier = 0;
 
     private bool _isFlying = false;
     private bool _hasSticked = true;
@@ -30,13 +31,7 @@ public class BallController : MonoBehaviour {
 
     #region MonoBehaviour
     private void Start() {
-        DragHandler.onEndDrag += CorrectPosition;
-        DragHandler.onEndDrag += ApplyJumpForce;
-        DragHandler.onEndDrag += ResetParentObject;
-        LevelManager.onLevelChanged += SetStartingPos;
-        InputManager.omClickToScreen += StickToTower;
-        GameManager.onGameStateChange += CheckGameState;
-        onStick += SetFlags;
+        SubscribeToActions();
         _rb = GetComponent<Rigidbody>();
         _inputManager = GetComponent<InputManager>();
         _rb.isKinematic = true;
@@ -67,11 +62,9 @@ public class BallController : MonoBehaviour {
         if (_inputManager.SwipeDistance >= 0 || _inputManager.SwipeDistance / 100 > _deadZone || !_hasSticked) {
             return;
         }
+        onRelase?.Invoke();
         LeanTween.cancelAll();
-        _rb.isKinematic = false;
         _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance / 5), ForceMode.Impulse);
-        _isFlying = true;
-        _hasSticked = false;
     }
 
 
@@ -139,10 +132,32 @@ public class BallController : MonoBehaviour {
         _rb.isKinematic = true;
         _isFlying = false;
         _hasSticked = true;
+
+    }
+
+    private void SetPositionsWhenSticked() {
         transform.parent = null;
         _ballParent.position = new Vector3(0, transform.position.y, 5);
         transform.parent = _ballParent;
-        _barTransform.position = new Vector3(0,transform.position.y,5); 
+        _barTransform.position = new Vector3(0, transform.position.y, 5);
+    }
+
+    private void SubscribeToActions() {
+        DragHandler.onEndDrag += CorrectPosition;
+        DragHandler.onEndDrag += ApplyJumpForce;
+        DragHandler.onEndDrag += ResetParentObject;
+        LevelManager.onLevelChanged += SetStartingPos;
+        InputManager.omClickToScreen += StickToTower;
+        GameManager.onGameStateChange += CheckGameState;
+        onStick += SetFlags;
+        onStick += SetPositionsWhenSticked;
+        onRelase += SetJumpFlags;
+    }
+
+    private void SetJumpFlags() {
+        _rb.isKinematic = false;
+        _isFlying = true;
+        _hasSticked = false;
     }
 
     #endregion

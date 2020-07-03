@@ -1,4 +1,5 @@
-﻿using Deform; 
+﻿using Deform;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine;
 public class BendTween : MonoBehaviour {
 
     private BendDeformer _bendDeformer;
+    private LTDescr _ltdesc;
 
     [SerializeField]
     private Transform _parentTransform = null;
@@ -22,6 +24,13 @@ public class BendTween : MonoBehaviour {
         _bendDeformer = GetComponent<BendDeformer>();
     }
 
+    private void Start() {
+        BallController.onRelase += ShakeTheBar;
+        BallController.onStick += StopShaking;
+    }
+
+   
+
     private void Update() {
 
         float mappedAngle = 0;
@@ -34,4 +43,16 @@ public class BendTween : MonoBehaviour {
         _bendDeformer.Angle = mappedAngle;
     }
 
+    private void ShakeTheBar() {
+
+        _ltdesc = LeanTween.value(_minBendAngle, _maxBendAngle, 2f).setEase(LeanTweenType.easeInOutBounce).setOnUpdate((float value) => {
+            _minBendAngle = value;
+        });
+    }
+
+    private void StopShaking() {
+        if (_ltdesc != null) {
+            LeanTween.cancel(_ltdesc.id);
+        }
+    }
 }

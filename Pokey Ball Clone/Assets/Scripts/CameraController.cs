@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour {
 
     private void SetFOV() {
         if (_inputmanager.IsSwiping)
-            _cam.m_Lens.FieldOfView = _fov - _inputmanager.SwipeDistance / 100;
+            _cam.m_Lens.FieldOfView = _fov - _inputmanager.SwipeDistance / 40;
     }
     private void ResetFOV() {
         if (!_inputmanager.IsSwiping)
