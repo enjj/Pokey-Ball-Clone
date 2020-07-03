@@ -10,6 +10,18 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public static Action onEndDrag;
     private bool _isBlocked = false;
 
+    private void Start() {
+        GameManager.onGameStateChange += SetBlockCondition;    
+    }
+
+    private void SetBlockCondition(Enums.GameStates state) {
+        if (state == Enums.GameStates.LevelFinish) {
+            _isBlocked = true;
+        } else {
+            _isBlocked = false;
+        }
+    }
+
     public void OnBeginDrag(PointerEventData eventData) {
         if (_isBlocked) {
             return;

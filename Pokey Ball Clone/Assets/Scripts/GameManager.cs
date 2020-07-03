@@ -22,6 +22,10 @@ public class GameManager : MonoBehaviour {
         set { ChangeGameState(value); }
     }
 
+    private void Start() {
+        _state = Enums.GameStates.Gameplay;
+    }
+
     public void ChangeGameState(Enums.GameStates state) {
         onGameStateChange?.Invoke(state);
     }

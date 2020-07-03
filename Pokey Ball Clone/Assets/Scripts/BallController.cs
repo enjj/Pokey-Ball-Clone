@@ -17,8 +17,6 @@ public class BallController : MonoBehaviour {
     private float _rayDistance = 0f;
     [SerializeField]
     private float _deadZone = 0f;
-    [SerializeField]
-    private float _shakeAmount= 1f;
 
     private bool _isFlying = false;
     private bool _hasSticked = true;
@@ -32,19 +30,23 @@ public class BallController : MonoBehaviour {
         DragHandler.onEndDrag += ApplyJumpForce;
         DragHandler.onDragging += CancelLeanTween;
         InputManager.omClickToScreen += StickToTower;
-
+        GameManager.onGameStateChange += CheckGameState;
         _rb = GetComponent<Rigidbody>();
         _inputManager = GetComponent<InputManager>();
         _rb.isKinematic = true;
         _stickPos = transform.position;
     }
 
+   
+
     private void Update() {
-        ApplyConstantFallForce();
-        if (_inputManager.IsSwiping) {
-            AdjustPosition();
+        if (GameManager.instance.State == Enums.GameStates.Gameplay) {
+            ApplyConstantFallForce();
+            if (_inputManager.IsSwiping) {
+                AdjustPosition();
+            }
+            GetHitInfo();
         }
-        GetHitInfo();
     }
     #endregion
 
@@ -61,7 +63,7 @@ public class BallController : MonoBehaviour {
         }
         LeanTween.cancelAll();
         _rb.isKinematic = false;
-        _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance / 5), ForceMode.Impulse);
+        _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance / 10), ForceMode.Impulse);
         _isFlying = true;
         _hasSticked = false;
     }
@@ -112,6 +114,14 @@ public class BallController : MonoBehaviour {
             return null;
         }
     }
+
+    private void CheckGameState(Enums.GameStates state) {
+        if (state == Enums.GameStates.LevelFinish) {
+            _rb.velocity = Vector3.zero;
+
+        }
+    }
+
     #endregion
 
 }

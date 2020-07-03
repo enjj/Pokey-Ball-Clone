@@ -14,9 +14,20 @@ public class AnimationController : MonoBehaviour {
     [SerializeField]
     private LeanTweenType _easeType;
     private LTDescr _ltdesc;
-
+    [SerializeField]
+    private Transform _test;
     private void Start() {
         BallController.onStick += DecreaseShakeAmount;
+        GameManager.onGameStateChange += PlayLevelFinishAnimation;
+    }
+
+    private void PlayLevelFinishAnimation(Enums.GameStates state) {
+        if (state == Enums.GameStates.LevelFinish) {
+            Vector3 pos = transform.position;
+            LeanTween.move(gameObject,_test.position,1f).setEase(LeanTweenType.easeInCubic).setOnComplete(()=> { 
+                
+            });
+        }
     }
 
     private void DecreaseShakeAmount() {
