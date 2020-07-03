@@ -10,4 +10,8 @@ public class Enums{
         LevelFinish,
         LevelFail
     }
+
+    public enum Collectables {
+        Gold
+    }
 }
