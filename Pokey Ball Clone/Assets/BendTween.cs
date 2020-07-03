@@ -23,18 +23,12 @@ public class BendTween : MonoBehaviour {
     }
 
     private void Update() {
-        //if (Input.GetKeyDown(KeyCode.Space)) {
-        //    float currentRotZ = _parentTransform.rotation.z;
-        //    LeanTween.value(currentRotZ, _maxParentRotZ, 0.5f).setOnUpdate((float value) => {
-        //        _parentTransform.rotation = Quaternion.Euler(_parentTransform.rotation.x, _parentTransform.rotation.y, value);
-        //    });
-        //}
 
         float mappedAngle = 0;
-        if (_parentTransform.localRotation.z < 0) {
-            mappedAngle = ExtensionMethods.Map(_parentTransform.localRotation.eulerAngles.z - 360, _minParentRotZ, _maxParentRotZ, _minBendAngle, _maxBendAngle);
+        if (_parentTransform.localRotation.x < 0) {
+            mappedAngle = ExtensionMethods.Map(_parentTransform.localRotation.eulerAngles.x - 360, _minParentRotZ, _maxParentRotZ, _minBendAngle, _maxBendAngle);
         } else {
-            mappedAngle = ExtensionMethods.Map(_parentTransform.localRotation.eulerAngles.z, _minParentRotZ, _maxParentRotZ, _minBendAngle, _maxBendAngle);
+            mappedAngle = ExtensionMethods.Map(_parentTransform.localRotation.eulerAngles.x, _minParentRotZ, _maxParentRotZ, _minBendAngle, _maxBendAngle);
         }
 
         _bendDeformer.Angle = mappedAngle;

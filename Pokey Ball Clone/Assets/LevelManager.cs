@@ -28,8 +28,11 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void NextLevel() {
-        _levels[_currentlevel - 1].SetActive(false);
-        _levels[_currentlevel].SetActive(true);
-        onLevelChanged?.Invoke();
+        if (_levels[_currentlevel] != null) {
+            _levels[_currentlevel - 1].SetActive(false);
+            _levels[_currentlevel].SetActive(true);
+            _currentlevel++;
+            onLevelChanged?.Invoke();
+        }
     }
 }

@@ -17,6 +17,10 @@ public class BallController : MonoBehaviour {
     private float _rayDistance = 0f;
     [SerializeField]
     private float _deadZone = 0f;
+    [SerializeField]
+    private Transform _ballParent;
+    [SerializeField]
+    private Transform _barTransform;
 
     private bool _isFlying = false;
     private bool _hasSticked = true;
@@ -28,16 +32,18 @@ public class BallController : MonoBehaviour {
     private void Start() {
         DragHandler.onEndDrag += CorrectPosition;
         DragHandler.onEndDrag += ApplyJumpForce;
+        DragHandler.onEndDrag += ResetParentObject;
         LevelManager.onLevelChanged += SetStartingPos;
         InputManager.omClickToScreen += StickToTower;
         GameManager.onGameStateChange += CheckGameState;
+        onStick += SetFlags;
         _rb = GetComponent<Rigidbody>();
         _inputManager = GetComponent<InputManager>();
         _rb.isKinematic = true;
         _stickPos = transform.position;
     }
 
-   
+
 
     private void Update() {
         if (GameManager.instance.State == Enums.GameStates.Gameplay) {
@@ -68,13 +74,13 @@ public class BallController : MonoBehaviour {
         _hasSticked = false;
     }
 
-   
+
     /// <summary>
     /// Adjust the gameobject position based on swipe distance to simulate strech effect
     /// </summary>
     private void AdjustPosition() {
         if (_hasSticked) {
-            transform.position = new Vector3(transform.position.x, _stickPos.y + (_inputManager.SwipeDistance / 100), transform.position.z);
+            _ballParent.rotation = Quaternion.Euler(new Vector3(_stickPos.y + (_inputManager.SwipeDistance / 10), transform.rotation.y, transform.rotation.z));
         }
     }
 
@@ -93,10 +99,6 @@ public class BallController : MonoBehaviour {
     private void StickToTower() {
         if (_isFlying) {
             if (GetHitInfo() == "Stickable") {
-                _rb.isKinematic = true;
-                _isFlying = false;
-                _hasSticked = true;
-                _stickPos = transform.position;
                 onStick?.Invoke();
             } else if (GetHitInfo() == "NonStickable") {
                 _rb.velocity = Vector3.zero;
@@ -109,6 +111,7 @@ public class BallController : MonoBehaviour {
 
         if (Physics.Raycast(transform.position, (Vector3.forward), out hit, _rayDistance)) {
             Debug.DrawRay(transform.position, (Vector3.forward) * hit.distance, Color.yellow);
+            Debug.Log(hit.collider.tag);
             return hit.collider.tag;
         } else {
             return null;
@@ -123,8 +126,23 @@ public class BallController : MonoBehaviour {
     }
 
     private void SetStartingPos() {
-        transform.position = new Vector3(0, 8, 0);
+        _ballParent.position = new Vector3(0, 10, 5);
+        transform.localPosition = new Vector3(0, 0, -6);
         StickToTower();
+    }
+
+    private void ResetParentObject() {
+        _ballParent.rotation = Quaternion.Euler(Vector3.zero);
+    }
+
+    private void SetFlags() {
+        _rb.isKinematic = true;
+        _isFlying = false;
+        _hasSticked = true;
+        transform.parent = null;
+        _ballParent.position = new Vector3(0, transform.position.y, 5);
+        transform.parent = _ballParent;
+        _barTransform.position = new Vector3(0,transform.position.y,5); 
     }
 
     #endregion

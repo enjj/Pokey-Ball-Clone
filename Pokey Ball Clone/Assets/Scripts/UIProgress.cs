@@ -31,7 +31,7 @@ public class UIProgress : MonoBehaviour {
         SceneManager.sceneLoaded += SceneLoaded;
     }
     private void Start() {
-        LevelManager.onLevelChanged += SetStartAndEndPosition;    
+        LevelManager.onLevelChanged += UpdateUI;    
     }
 
     private void SceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -47,9 +47,10 @@ public class UIProgress : MonoBehaviour {
         _endTransform = GameObject.FindGameObjectWithTag("FINISH").transform;
     }
 
-    private void SetStartAndEndPosition() {
+    private void UpdateUI() {
         _startTransform = GameObject.FindGameObjectWithTag("START").transform;
         _endTransform = GameObject.FindGameObjectWithTag("FINISH").transform;
+        _txtCurrentLevel.text = LevelManager.instance.CurrentLevel.ToString();
     }
 
     private void Update() {
