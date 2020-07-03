@@ -100,6 +100,8 @@ public class BallController : MonoBehaviour {
                 _hasSticked = true;
                 _stickPos = transform.position;
                 onStick?.Invoke();
+            } else if (GetHitInfo() == "NonStickable") {
+                _rb.velocity = Vector3.zero;
             }
         }
     }

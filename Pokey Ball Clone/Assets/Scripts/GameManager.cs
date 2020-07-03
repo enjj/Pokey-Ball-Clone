@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
         } else if (instance != this) {
             Destroy(gameObject);
         }
+        Application.targetFrameRate = 60;
     }
     #endregion
 
