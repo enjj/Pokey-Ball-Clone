@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3488064790815439030}
   - component: {fileID: 3488064790815439029}
   - component: {fileID: 3488064790815439028}
+  - component: {fileID: 2117817332}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,8 +63,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d5351dc8b284a499033f6cd63f25b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gravityMultiplier: 20
+  _gravityMultiplier: 50
   _rayDistance: 5
+  _deadZone: -2
+  _shakeAmount: 1
 --- !u!114 &3488064790815439028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,6 +79,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7078ba4435d1d4bb677a5381b6ce26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2117817332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3488064790815439016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e3f2e020872044fbe6fc9b695442c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gfx: {fileID: 3488064791076960065}
+  speed: 20
+  _easeType: 30
 --- !u!1 &3488064791076960066
 GameObject:
   m_ObjectHideFlags: 0

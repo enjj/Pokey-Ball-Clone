@@ -61,7 +61,7 @@ public class BallController : MonoBehaviour {
         }
         LeanTween.cancelAll();
         _rb.isKinematic = false;
-        _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance / 10), ForceMode.Impulse);
+        _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance / 5), ForceMode.Impulse);
         _isFlying = true;
         _hasSticked = false;
     }
