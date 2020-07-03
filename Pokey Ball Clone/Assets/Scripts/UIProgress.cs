@@ -8,9 +8,9 @@ public class UIProgress : MonoBehaviour {
     [Header("Dynamic Assignment")]
     [SerializeField]
     private Transform _meTransform = null;
-    [SerializeField]
+    //[SerializeField]
     private Transform _startTransform = null;
-    [SerializeField]
+    //[SerializeField]
     private Transform _endTransform = null;
 
     [Header("Initializations")]
@@ -30,17 +30,24 @@ public class UIProgress : MonoBehaviour {
         _meRect.anchoredPosition = new Vector2(_rectStartX, _meRect.anchoredPosition.y);
         SceneManager.sceneLoaded += SceneLoaded;
     }
+    private void Start() {
+        LevelManager.onLevelChanged += SetStartAndEndPosition;    
+    }
 
     private void SceneLoaded(Scene scene, LoadSceneMode mode) {
-        _currentSceneIndex = scene.buildIndex;
 
-        _txtCurrentLevel.text = scene.buildIndex.ToString();
+        _txtCurrentLevel.text = LevelManager.instance.CurrentLevel.ToString();
 
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject != null) {
             _meTransform = playerObject.transform;
         }
 
+        _startTransform = GameObject.FindGameObjectWithTag("START").transform;
+        _endTransform = GameObject.FindGameObjectWithTag("FINISH").transform;
+    }
+
+    private void SetStartAndEndPosition() {
         _startTransform = GameObject.FindGameObjectWithTag("START").transform;
         _endTransform = GameObject.FindGameObjectWithTag("FINISH").transform;
     }

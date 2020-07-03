@@ -16,19 +16,37 @@ public class AnimationController : MonoBehaviour {
     private LeanTweenType _easeType;
     private LTDescr _ltdesc;
     [SerializeField]
-    private Transform _test;
+    private Transform _finishFlag;
     private void Start() {
         BallController.onStick += DecreaseShakeAmount;
         GameManager.onGameStateChange += PlayLevelFinishAnimation;
         DragHandler.onBeginDrag += CancelShakeAnimation;
+        DragHandler.onDragging += CancelAllLeanTween;
+        LevelManager.onLevelChanged += CancelAllLeanTween;
+    }
+
+
+    private void Update() {
+        ShakeTheBall();
+    }
+    private void ShakeTheBall() {
+        Vector3 pos = transform.position;
+        pos.y += (Mathf.Sin(Time.time * speed) * _amount);
+        _gfx.position = pos;
+    }
+
+    private void CancelAllLeanTween(PointerEventData data) {
+        LeanTween.cancelAll();
+    }
+
+    private void CancelAllLeanTween() {
+        LeanTween.cancelAll();
     }
 
     private void PlayLevelFinishAnimation(Enums.GameStates state) {
         if (state == Enums.GameStates.LevelFinish) {
             Vector3 pos = transform.position;
-            LeanTween.move(gameObject, _test.position, 1f).setEase(LeanTweenType.easeInCubic).setOnComplete(() => {
-                //TODO : Open LevelFinish UI;
-            });
+            LeanTween.move(gameObject, _finishFlag.position, 1f).setEase(LeanTweenType.easeInCubic);
         }
     }
 
@@ -45,14 +63,4 @@ public class AnimationController : MonoBehaviour {
             _amount = 0f;
         }
     }
-
-    private void Update() {
-        ShakeTheBall();
-    }
-    private void ShakeTheBall() {
-        Vector3 pos = transform.position;
-        pos.y += (Mathf.Sin(Time.time * speed) * _amount);
-        _gfx.position = pos;
-    }
-
 }

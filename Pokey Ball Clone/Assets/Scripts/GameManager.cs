@@ -25,9 +25,15 @@ public class GameManager : MonoBehaviour {
 
     private void Start() {
         _state = Enums.GameStates.Gameplay;
+        LevelManager.onLevelChanged += SetGameState;
     }
+
 
     public void ChangeGameState(Enums.GameStates state) {
         onGameStateChange?.Invoke(state);
+    }
+
+    private void SetGameState() {
+        State = Enums.GameStates.Gameplay;
     }
 }

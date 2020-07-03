@@ -28,7 +28,7 @@ public class BallController : MonoBehaviour {
     private void Start() {
         DragHandler.onEndDrag += CorrectPosition;
         DragHandler.onEndDrag += ApplyJumpForce;
-        DragHandler.onDragging += CancelLeanTween;
+        LevelManager.onLevelChanged += SetStartingPos;
         InputManager.omClickToScreen += StickToTower;
         GameManager.onGameStateChange += CheckGameState;
         _rb = GetComponent<Rigidbody>();
@@ -63,14 +63,12 @@ public class BallController : MonoBehaviour {
         }
         LeanTween.cancelAll();
         _rb.isKinematic = false;
-        _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance / 10), ForceMode.Impulse);
+        _rb.AddForce(Vector3.up * Mathf.Abs(_inputManager.SwipeDistance / 5), ForceMode.Impulse);
         _isFlying = true;
         _hasSticked = false;
     }
 
-    private void CancelLeanTween(PointerEventData data) {
-        LeanTween.cancelAll();
-    }
+   
     /// <summary>
     /// Adjust the gameobject position based on swipe distance to simulate strech effect
     /// </summary>
@@ -122,6 +120,11 @@ public class BallController : MonoBehaviour {
             _rb.velocity = Vector3.zero;
 
         }
+    }
+
+    private void SetStartingPos() {
+        transform.position = new Vector3(0, 8, 0);
+        StickToTower();
     }
 
     #endregion
